@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-import os 
+import os
 import database as db
 
 template_dir = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -11,9 +11,12 @@ app = Flask(__name__, template_folder = template_dir)
 @app.route('/')
 
 def home():
-    cursor = db.database.cursor()
+    # cursor = db.database.cursor()
+    conn = db.conn
+    cursor = conn.cursor()
     cursor.execute("SELECT * FROM users")
     myresult = cursor.fetchall()
+    
     # Convertir datos a una lista de diccionarios
     insertObject = []
     columnNames  = [column[0] for column in cursor.description]
@@ -22,7 +25,7 @@ def home():
         insertObject.append(dict(zip(columnNames, record)))
     cursor.close()
 
-    return render_template('index.html')
+    return "Mostrando datos de la base de datos..."
 
 
 if __name__ == "__main__":
